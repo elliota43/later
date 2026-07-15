@@ -20,3 +20,10 @@ void ArgsParser::parse() {
     activeCmd = CommandType::Unknown;
   }
 }
+
+auto ArgsParser::getCommandArgs() const -> std::vector<std::string> {
+  if (parsedArgs.size() <= 1)
+    return {};
+
+  return std::vector<std::string>(parsedArgs.begin() + 1, parsedArgs.end());
+}

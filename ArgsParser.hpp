@@ -21,6 +21,8 @@ public:
 
   CommandType getCommand() const { return activeCmd; }
 
+  std::vector<std::string> getCommandArgs() const;
+
 private:
   size_t argc;
   const char **rawargs;

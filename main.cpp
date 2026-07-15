@@ -1,5 +1,12 @@
 #include "ArgsParser.hpp"
+#include "Commands.hpp"
+
 #include <cstdlib>
+#include <functional>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 void print_usage(const char **argv) {
   fprintf(stderr, "Usage: %s add [tag]\n", argv[0]);
@@ -17,25 +24,21 @@ int main(int argc, const char *argv[]) {
 
   parser.parse();
 
-  switch (parser.getCommand()) {
-  case CommandType::None:
+  CommandType cmd_type = parser.getCommand();
+
+  using CommandHandler = std::function<void(const std::vector<std::string> &)>;
+
+  std::unordered_map<CommandType, CommandHandler> commandMap = {
+      {CommandType::Add, Commands::handleAdd},
+      {CommandType::Open, Commands::handleOpen},
+      {CommandType::View, Commands::handleView},
+  };
+
+  auto it = commandMap.find(cmd_type);
+  if (it != commandMap.end()) {
+    it->second(parser.getCommandArgs());
+  } else {
+    std::cerr << "Unknown command.\n";
     print_usage(argv);
-    break;
-
-  case CommandType::Open:
-    // open
-    break;
-
-  case CommandType::Add:
-    // add
-    break;
-
-  case CommandType::View:
-    // view
-    break;
-
-  case CommandType::Unknown:
-    print_usage(argv);
-    break;
   }
 }
