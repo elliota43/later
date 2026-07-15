@@ -5,6 +5,6 @@ when I have the time.
 
 Like every good void, structure is essential, so content can be categorized/grouped into `tags`.
 
-written in C because my asceticism borders on mental illness at this point
+trying to learn c++
 
 made with love :)
