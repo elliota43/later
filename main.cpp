@@ -1,5 +1,6 @@
 #include "ArgsParser.hpp"
 #include "Commands.hpp"
+#include "DB.hpp"
 
 #include <cstdlib>
 #include <functional>
@@ -26,7 +27,10 @@ int main(int argc, const char *argv[]) {
 
   CommandType cmd_type = parser.getCommand();
 
-  using CommandHandler = std::function<void(const std::vector<std::string> &)>;
+  using CommandHandler =
+      std::function<void(const std::vector<std::string> &, DB &db)>;
+
+  DB db{};
 
   std::unordered_map<CommandType, CommandHandler> commandMap = {
       {CommandType::Add, Commands::handleAdd},
@@ -36,7 +40,7 @@ int main(int argc, const char *argv[]) {
 
   auto it = commandMap.find(cmd_type);
   if (it != commandMap.end()) {
-    it->second(parser.getCommandArgs());
+    it->second(parser.getCommandArgs(), db);
   } else {
     std::cerr << "Unknown command.\n";
     print_usage(argv);

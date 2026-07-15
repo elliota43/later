@@ -1,2 +1,4 @@
 later
+.DS_Store
 *.dSYM
+*.o
